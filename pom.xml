@@ -45,6 +45,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- H2 Database Engine -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version> <!-- Use the latest version available -->
+			<scope>test</scope> <!-- This makes the dependency available only for the test compilation and execution phases -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

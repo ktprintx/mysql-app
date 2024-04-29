@@ -36,12 +36,21 @@ Add Liquibase Maven Plugin to Your Project
 
 Step 1: First, ensure that the Liquibase Maven plugin is included in your pom.xml:
 <plugin>
-    <groupId>org.liquibase</groupId>
-    <artifactId>liquibase-maven-plugin</artifactId>
-    <version>4.27.0</version>  <!-- Use the latest version available -->
-    <configuration>
-        <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-    </configuration>
+	<groupId>org.liquibase</groupId>
+	<artifactId>liquibase-maven-plugin</artifactId>
+	<version>4.27.0</version>  <!-- Ensure you use the latest or required version -->
+	<configuration>
+		<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+	</configuration>
+	<executions>
+		<execution>
+			<id>update-database</id>
+			<phase>process-resources</phase>
+			<goals>
+				<goal>update</goal>
+			</goals>
+		</execution>
+	</executions>
 </plugin>
 
 Step 2: Configure the liquibase.properties File
@@ -65,12 +74,16 @@ Optional: Automating Changelog Execution
 If you want to automate the application of future changes when your application starts, 
 you can configure the Liquibase Maven plugin to run the update goal as part of your build or deploy process:
 
-<executions>
-    <execution>
-        <phase>process-resources</phase>
-        <goals>
-            <goal>update</goal>
-        </goals>
-    </execution>
-</executions>
+Step 4: Test the Configuration
+
+To ensure that everything is set up correctly, you can run a Maven lifecycle phase that comes after or includes the phase you specified
+mvn process-resources
+or simply:
+mvn install
+
+This will trigger the Liquibase update as part of the build process, applying any pending database changes defined in your changelog file.
+
+By setting this up, you ensure that every time your project is built, 
+Liquibase will automatically apply the latest database changes, keeping your development, testing,
+ or production databases up to date with your application's schema.
 
