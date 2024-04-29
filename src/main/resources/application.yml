@@ -9,3 +9,6 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
+    liquibase:
+        change-log: classpath:/db/changelog/app-changelog.xml
+        default-schema: sbhm
