@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 
 
 @SpringBootTest
-@ActiveProfiles("test2")
+@ActiveProfiles("test")
 class MysqlAppApplicationTests {
 
 	@Autowired
