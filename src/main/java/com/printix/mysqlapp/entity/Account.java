@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,4 +21,15 @@ public class Account {
     @Column(name = "account_holder_name")
     private String accountHolderName;
     private double balance;
+
+    @Column(name = "account_id", columnDefinition = "char(36)")
+    @Convert(converter = UUIDStringConverter.class)
+    private UUID accountId;
+
+    @PrePersist
+    private void initializeUUID() {
+        if (accountId == null) {
+            accountId = UUID.randomUUID();
+        }
+    }
 }

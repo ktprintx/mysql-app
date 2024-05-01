@@ -35,28 +35,29 @@ download and install from https://www.liquibase.com/download
 		</dependency>		
 3. Add to POM.xml file add liquibase plugin to support online changes:
 			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>4.27.0</version>  <!-- Ensure you use the latest or required version -->
-				<configuration>
-					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
-				</configuration>
-				<executions>
-					<execution>
-						<id>update-database</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>update</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.24.0</version>
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                    <changeLogFile>src/main/resources/db/changelog/db.initial-changelog.xml</changeLogFile>
+                </configuration>
+            </plugin>
 
-4. Add to aplication.yml liquibase dependency:
+4. create folder: scripts and add file make_db_snapshot.sh   (from IJ right click on file and Run 'make_db_snapshot.sh' - will generate the screenshot of database or can run it from BASH)
+
+cd ..
+mvn liquibase:generateChangeLog -Dliquibase.outputChangeLogFile="src\main\resources\db\changelog\db.initial-changelog.xml"
+
+4a. if project taken from git and new emptry database schema create (manually) then run: mvn liquibase:update to recreate all database objects
+File: \src\main\resources\db\changelog\db.initial-changelog.xml  must contains complete database snapshot.
+
+
+5. Add to aplication.yml liquibase dependency:
     liquibase:
         change-log: classpath:/db/changelog/app-changelog.xml
-        default-schema: sbhm
-5. Create folder: db.changelog under src/main/resources
+        default-schema: AppDbSchema
+6. Create folder: db.changelog under src/main/resources
 
 Generating an Initial Changelog with Liquibase 
 	a. Ensure Liquibase and JDBC Driver are Installed: You need to have Liquibase and the appropriate JDBC driver for your database installed on your machine.
@@ -67,9 +68,9 @@ Generating an Initial Changelog with Liquibase
 Create a liquibase.properties file in your src/main/resources directory with the necessary configurations:
 
 changeLogFile=src/main/resources/db/changelog/app-changelog.xml
-url=jdbc:mysql://localhost:3306/sbhm
+url=jdbc:mysql://localhost:3306/AppDbSchema
 username=root
-password=Kofax123!
+password=Printix123!
 driver=com.mysql.cj.jdbc.Driver
 outputChangeLogFile=src/main/resources/db/changelog/db.initial-changelog.xml
 
@@ -78,6 +79,8 @@ outputChangeLogFile=src/main/resources/db/changelog/db.initial-changelog.xml
 Now, use Maven to run (in bash) the Liquibase generateChangeLog goal, which will analyze your existing database and create a changelog file that describes the current schema:
 
 mvn liquibase:generateChangeLog -Dliquibase.outputChangeLogFile=src/main/resources/db/changelog/db.initial-changelog.xml
+mvn liquibase:generateChangeLog -Dliquibase.url="jdbc:mysql://localhost:3306/sbhm" -Dliquibase.username=root -Dliquibase.password=Kofax123! -Dliquibase.outputChangeLogFile=src/main/resources/db/changelog/db.initial-changelog.xml
+
 
 8. Change app-changelog.xml to support initial db schema
 
@@ -94,14 +97,10 @@ mvn liquibase:generateChangeLog -Dliquibase.outputChangeLogFile=src/main/resourc
 </databaseChangeLog>
 
 
-
 Optional: Automating Changelog Execution
 
 If you want to automate the application of future changes when your application starts, 
 you can configure the Liquibase Maven plugin to run the update goal as part of your build or deploy process:
-
-
-
 
 
 Test the Configuration

@@ -8,7 +8,7 @@ spring:
         username: root
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
     liquibase:
         change-log: classpath:/db/changelog/app-changelog.xml
         default-schema: sbhm
